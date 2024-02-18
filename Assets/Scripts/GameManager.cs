@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,12 +6,19 @@ namespace PlaneShooter
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private UIManager _uiManager;
-        [SerializeField] private SceneLoader _sceneLoader;
+        [SerializeField] private AudioManager _audioManager;
+
         public UIManager UIManager { get => _uiManager; }
+        public AudioManager AudioManager { get => _audioManager; }
+
+        private int level;
+
         public static GameManager Instance = null;
 
         private void Awake()
         {
+            SceneManager.sceneLoaded += OnSceneLoad;
+
             if (Instance == null)
             {
                 Instance = this;
@@ -22,17 +27,29 @@ namespace PlaneShooter
             {
                 Destroy(gameObject);
             }
+
+            DontDestroyOnLoad(gameObject);
         }
 
-        private void Start()
+        public void StartGame()
         {
-            _sceneLoader = FindAnyObjectByType<SceneLoader>();
+            LoadScene(1);
         }
 
-        public void LoadScene()
+        public void QuitGame()
         {
-            if (_sceneLoader != null)
-                Instance._sceneLoader.Reload();
+            Application.Quit();
+        }
+
+        private void OnSceneLoad(Scene scene, LoadSceneMode mode)
+        {
+            _uiManager = FindAnyObjectByType<UIManager>();
+        }
+
+        private void LoadScene(int level)
+        {
+            this.level = level;
+            SceneManager.LoadScene("Level" + level);
         }
     }
 }

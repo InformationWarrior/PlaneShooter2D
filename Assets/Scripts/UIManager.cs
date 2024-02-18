@@ -10,6 +10,7 @@ namespace PlaneShooter
         [SerializeField] private GameObject gameOverPanel;
 
         private bool pauseStatus;
+
         private void Start()
         {
             pauseStatus = false;
@@ -45,6 +46,7 @@ namespace PlaneShooter
             gameOverPanel.SetActive(status);
             pauseButton.SetActive(!status);
         }
+
         private void UpdateUIOnPause(bool pause)
         {
             pauseMenuPanel.SetActive(pause);
